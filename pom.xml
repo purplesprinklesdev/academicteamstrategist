@@ -14,9 +14,10 @@
         <maven.compiler.target>19</maven.compiler.target>
         <maven.compiler.source>19</maven.compiler.source>
         <junit.version>5.8.2</junit.version>
-        <runtimePath>MODULEPATH</runtimePath>
         <jakarta.jakartaee-api.version>9.1.0</jakarta.jakartaee-api.version>
         <failOnMissingWebXml>false</failOnMissingWebXml>
+        <javafx.version>21-ea+5</javafx.version>
+        <javafx.maven.plugin.version>0.0.13</javafx.maven.plugin.version>
     </properties>
 
     <dependencies>
@@ -36,43 +37,7 @@
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
-            <version>21-ea+5</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-base -->
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-base</artifactId>
-            <version>21-ea+5</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-fxml -->
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-fxml</artifactId>
-            <version>21-ea+5</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-graphics -->
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-graphics</artifactId>
-            <version>21-ea+5</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-media -->
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-media</artifactId>
-            <version>21-ea+5</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-swing -->
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-swing</artifactId>
-            <version>21-ea+5</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-web -->
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-web</artifactId>
-            <version>21-ea+5</version>
+            <version>${javafx.version}</version>
         </dependency>
     </dependencies>
 
@@ -83,6 +48,22 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
                 <version>3.3.2</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <release>19</release>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.openjfx</groupId>
+                <artifactId>javafx-maven-plugin</artifactId>
+                <version>${javafx.maven.plugin.version}</version>
+                <configuration>
+                    <mainClass>personal.mstall.main.Main</mainClass>
+                </configuration>
             </plugin>
         </plugins>
     </build>
