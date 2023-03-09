@@ -7,7 +7,7 @@ import jakarta.xml.bind.Marshaller;
 import jakarta.xml.bind.Unmarshaller;
 
 public class SaveManager {
-    private static final String PATH = "{0}.xml";
+    private static final String PATH = "%s.xml";
 
     public static final Object Load(FileType type) {
         File file = new File(String.format(PATH, type.filename));

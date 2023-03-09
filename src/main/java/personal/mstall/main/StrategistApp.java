@@ -1,6 +1,8 @@
 package personal.mstall.main;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
 
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -122,6 +124,7 @@ public class StrategistApp extends Application {
 
     private boolean save(ListView<String> list) {
         ObservableList<String> oList = list.getItems();
+
         ArrayList<String> playerNames = new ArrayList<>();
 
         // If the save operation gets aborted midway through, 
@@ -134,9 +137,19 @@ public class StrategistApp extends Application {
             playerNames.add(player.name);
         }
 
+
+        HashSet<String> dupeCheck = new HashSet<>();
         // Adding players which are found in the new list
         for (int i = 0; i < oList.size(); i++) {
             String name = oList.get(i);
+
+            boolean unique = dupeCheck.add(name);
+            if(!unique) {
+                Alert duplicates = new Alert(AlertType.ERROR, "Two or more players in the Roster have the name, \"" + name + "\"\nPlease correct this issue.", ButtonType.OK);
+                duplicates.showAndWait();
+                System.out.println("SAVE FAILED: NAME DUPLICATE ERROR");
+                return false;
+            }
 
             if(!playerNames.contains(name)) {
                 Player newPlayer = new Player(tempPlayers.size() + 1, name);
@@ -155,22 +168,25 @@ public class StrategistApp extends Application {
                 System.out.println("SAVE FAILED: ABORTED BY USER");
                 return false;
             }
-            for(Player player : tempPlayers) {
-                if(playerNames.contains(player.name)) {
-                    tempPlayers.remove(player);
-                    playerNames.remove(player.name);
-                }
+
+            // Go through tempPlayers, (using iterator to avoid exception) and remove players that match the list of removed players
+            Iterator<Player> it = tempPlayers.iterator();
+            while(it.hasNext()) {
+                Player player = it.next();
+                if (playerNames.contains(player.name))
+                    it.remove();
             }
         }
 
         Roster.roster.players = tempPlayers;
 
-        if(SaveManager.Save(Roster.roster, FileType.ROSTER)) {
+        boolean save = SaveManager.Save(Roster.roster, FileType.ROSTER);
+        if(save) {
             System.out.println("SAVED SUCCESSFULLY");
             return true;
         } else {
-            System.out.println("SAVING FAILED");
-            Alert error = new Alert(AlertType.ERROR, "Saving failed because an error occured. Files were not updated.", ButtonType.OK);
+            System.out.println("SAVING FAILED: FILE ERROR");
+            Alert error = new Alert(AlertType.ERROR, "Saving failed because a file error occured. Files were not updated.", ButtonType.OK);
             error.showAndWait();
             return false;
         }

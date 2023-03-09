@@ -9,8 +9,8 @@ public class Player {
     public double getAverage(int i) { return averages[i]; }
 
     
-
-    public Player(int index, String name) {
+    public Player() {}
+        public Player(int index, String name) {
         this.index = index;
         this.name = name;
     }
