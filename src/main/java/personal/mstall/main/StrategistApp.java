@@ -94,15 +94,18 @@ public class StrategistApp extends Application {
         primaryStage.setOnCloseRequest(e -> {
             e.consume();
 
+            // Check for changes
             ObservableList<String> oList = list.getItems();
-
             boolean changed = false;
             for (int i = 0; i < oList.size(); i++) {
                 if (oList.get(i) != Roster.roster.players.get(i).name)
                     changed = true;
             }
-            if (!changed)
+            
+            if (!changed) {
                 primaryStage.close();
+                return;
+            }
             
             CloseWarning warning = new CloseWarning();
             switch (warning.show()) {
