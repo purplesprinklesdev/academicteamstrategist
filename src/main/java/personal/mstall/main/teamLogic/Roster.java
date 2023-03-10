@@ -1,4 +1,4 @@
-package personal.mstall.main.team;
+package personal.mstall.main.teamLogic;
 import java.util.ArrayList;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlTransient;

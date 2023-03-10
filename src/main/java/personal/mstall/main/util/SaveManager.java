@@ -1,4 +1,4 @@
-package personal.mstall.main;
+package personal.mstall.main.util;
 
 import java.io.File;
 

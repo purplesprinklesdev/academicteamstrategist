@@ -1,4 +1,4 @@
-package personal.mstall.main;
+package personal.mstall.main.util;
 
 public final class OSUtils {
     public enum OS {

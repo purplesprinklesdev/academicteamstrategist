@@ -1,4 +1,4 @@
-package personal.mstall.main.team;
+package personal.mstall.main.teamLogic;
 
 public class Team {
     private int type;

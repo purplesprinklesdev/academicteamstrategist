@@ -1,4 +1,4 @@
-package personal.mstall.main;
+package personal.mstall.main.stages;
 
 import javafx.scene.control.*;
 import javafx.scene.control.ButtonBar.ButtonData;

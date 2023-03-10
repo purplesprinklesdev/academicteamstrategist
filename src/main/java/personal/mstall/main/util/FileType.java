@@ -1,6 +1,6 @@
-package personal.mstall.main;
+package personal.mstall.main.util;
 
-import personal.mstall.main.team.Roster;
+import personal.mstall.main.teamLogic.Roster;
 
 public enum FileType {
     ROSTER("roster", Roster.class)
