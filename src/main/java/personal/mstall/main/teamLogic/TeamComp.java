@@ -1,5 +1,8 @@
 package personal.mstall.main.teamLogic;
 
+import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlTransient;
+
 @XmlRootElement
 public class TeamComp {
     // Singleton

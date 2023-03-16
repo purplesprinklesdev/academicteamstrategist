@@ -11,12 +11,13 @@ public class Team {
     public int getSection() { return section; }
     public boolean setSection(int half, int section) {
         if (half < 1 | half > 2)
-            return false
+            return false;
         if (section < 1 | section > 4)
             return false;
         
         this.half = half;
         this.section = section;
+        return true;
     }
     public String getPlayerNames() { return playerNames; }
     public Player[] getPlayers() { return players; }
@@ -28,21 +29,22 @@ public class Team {
         for (Player player : players) {
             names += player.name + " ";
         }
-        names.subString(0, names.length);
+        names.substring(0, names.length());
         playerNames = names;
 
         this.players = players;
+        return true;
     }
 
     public Team(int section, Player[] players) {
         if (section < 0 | section > 7)
-            throw new Exception("Section is out of range! Must be 0-7, inclusive.");
+            return;
         this.section = section;
         this.players = players;
     }
     public Team(int section) {
         if (section < 0 | section > 7)
-            throw new Exception("Section is out of range! Must be 0-7, inclusive.");
+            return;
         this.section = section;
         this.players = new Player[4];
     }

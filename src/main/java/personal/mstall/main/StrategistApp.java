@@ -1,11 +1,25 @@
 package personal.mstall.main;
 
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+
 import personal.mstall.main.scoreSheet.ScoreSheets;
 import personal.mstall.main.stages.RosterStage;
 import personal.mstall.main.stages.SheetsMenuStage;
 import personal.mstall.main.teamLogic.Roster;
+import personal.mstall.main.teamLogic.Team;
+import personal.mstall.main.teamLogic.TeamComp;
 import personal.mstall.main.util.FileType;
 import personal.mstall.main.util.SaveManager;
 
@@ -61,7 +75,7 @@ public class StrategistApp extends Application {
         });
 
         manageSheets.setOnAction(e -> {
-            SheetsMenuStage sheetsMenuStage = new SheetsMenuStage(new Sheet());
+            SheetsMenuStage sheetsMenuStage = new SheetsMenuStage();
             sheetsMenuStage.showAndWait();
         });
 
@@ -101,7 +115,7 @@ public class StrategistApp extends Application {
     }
 
     private void updateTable(TableView<Team> table) {
-        ObservableList<Team> data = FXCollections.observableArrayList()
+        ObservableList<Team> data = FXCollections.observableArrayList();
         for (Team team : TeamComp.teamComp.teams) {
             data.add(team);
         }
