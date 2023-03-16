@@ -5,7 +5,8 @@ import personal.mstall.main.teamLogic.Roster;
 
 public enum FileType {
     ROSTER("roster", Roster.class),
-    SCORESHEETS("scoresheets", ScoreSheets.class)
+    SCORESHEETS("scoresheets", ScoreSheets.class),
+    TEAMCOMP("teamcomp", TeamComp.class)
     ;
 
 

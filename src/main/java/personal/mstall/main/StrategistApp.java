@@ -18,7 +18,7 @@ public class StrategistApp extends Application {
 
     private static final int MAINMENU_TABLE_COL = 3;
     private static final String[] MAINMENU_TABLE_TITLES = { "Half", "Section", "Team" };
-    private static final String[] MAINMENU_TABLE_PROPERTIES = { "half", "section", "players" };
+    private static final String[] MAINMENU_TABLE_PROPERTIES = { "half", "section", "playerNames" };
     private static final double MAINMENU_TABLE_TEAMCELL_WIDTH = 150;
     private static final double MAINMENU_TABLE_CELL_WIDTH = 45;
 
@@ -34,6 +34,8 @@ public class StrategistApp extends Application {
 
         Label topLabel = new Label(MAINMENU_LABEL);
 
+        Button regenerate = new Button("Regenerate Teams");
+
         TableView<Team> table = initializeTable();
 
         Label bottomLabel = new Label("Generated on: " + "");
@@ -45,7 +47,7 @@ public class StrategistApp extends Application {
         manageRoster.setText("Manage Roster");
 
         layout.setAlignment(Pos.TOP_CENTER);
-        layout.getChildren().addAll(topLabel, table, bottomLabel, manageSheets, manageRoster);
+        layout.getChildren().addAll(topLabel, regenerate, table, bottomLabel, manageSheets, manageRoster);
         Scene scene = new Scene(layout, MAINMENU_TABLE_WIDTH + 40, MAINMENU_TABLE_HEIGHT + 30);
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
@@ -53,16 +55,19 @@ public class StrategistApp extends Application {
 
         // -- Action Handlers -- //
 
+        regenerate.setOnAction(e -> {
+            TeamComp.teamComp.generateNewComp();
+            updateTable(table);
+        });
+
         manageSheets.setOnAction(e -> {
             SheetsMenuStage sheetsMenuStage = new SheetsMenuStage(new Sheet());
             sheetsMenuStage.showAndWait();
-            // TODO: Refresh
         });
 
         manageRoster.setOnAction(e -> {
             RosterStage rosterStage = new RosterStage();
             rosterStage.showAndWait();
-            // TODO: Refresh
         });
     }
 
@@ -90,8 +95,17 @@ public class StrategistApp extends Application {
         table.prefHeight(MAINMENU_TABLE_HEIGHT);
         table.setEditable(false);
         
-        // TODO: Refresh
+        updateTable(table);
+
         return table;
+    }
+
+    private void updateTable(TableView<Team> table) {
+        ObservableList<Team> data = FXCollections.observableArrayList()
+        for (Team team : TeamComp.teamComp.teams) {
+            data.add(team);
+        }
+        table.setItems(data);
     }
 
     private void loadFromFiles() {
@@ -108,5 +122,12 @@ public class StrategistApp extends Application {
             new ScoreSheets();
         else
             new ScoreSheets((ScoreSheets) sheetsObject);
+
+        Object teamCompObject = SaveManager.Load(FileType.TEAMCOMP);
+
+        if (teamCompObject == null)
+            new TeamComp();
+        else
+            new TeamComp((TeamComp) teamCompObject);
     }
 }
