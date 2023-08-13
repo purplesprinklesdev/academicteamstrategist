@@ -44,9 +44,11 @@ public class CloseWarning {
 
 
         ButtonType yes = new ButtonType(CLOSE_WARNING_YES, ButtonData.YES);
+
         // ButtonData.NO is also a default cancel button,
         // this causes issues when there is another cancel button present
         ButtonType no = new ButtonType(CLOSE_WARNING_NO, ButtonData.OTHER);
+        
         ButtonType cancel = new ButtonType("Cancel", ButtonData.CANCEL_CLOSE);
 
         dialog.getDialogPane().getButtonTypes().addAll(yes, no, cancel);

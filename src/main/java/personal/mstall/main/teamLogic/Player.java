@@ -1,27 +1,14 @@
 package personal.mstall.main.teamLogic;
 
+import jakarta.xml.bind.annotation.*;
+
 public class Player {
-    public int index;
+    @XmlAttribute
     public String name;
-    private double[] averages = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+    @XmlTransient
     private double[] sectionAverages;
 
-    public double[] getAverages() {
-        return averages;
-    }
-
-    public double getAverage(int i) {
-        return averages[i];
-    }
-
-    public void setAverages(double[] averages) {
-        this.averages = averages;
-    }
-
-    public void setAverage(int i, double average) {
-        averages[i] = average;
-    }
-    public double getSectionAverages() {
+    public double[] getSectionAverages() {
         return sectionAverages;
     }
     public void setSectionAverages(double[] sectionAverages) {
@@ -29,16 +16,12 @@ public class Player {
     }
 
     public Player() {
+        this.name = "Empty Slot";
+        double[] array = { 0, 0, 0, 0 };
+        sectionAverages = array;
     }
 
-    public Player(int index, String name) {
-        this.index = index;
+    public Player(String name) {
         this.name = name;
-    }
-
-    public Player(int index, String name, double[] averages) {
-        this.index = index;
-        this.name = name;
-        this.averages = averages;
     }
 }

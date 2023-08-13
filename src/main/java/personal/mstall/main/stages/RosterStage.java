@@ -93,10 +93,13 @@ public class RosterStage extends Stage {
 
             // Check for changes
             ObservableList<String> oList = list.getItems();
-            boolean changed = false;
-            for (int i = 0; i < oList.size(); i++) {
+            boolean changed = oList.size() != Roster.roster.players.size();
+
+            int i = 0;
+            while (!changed && i < oList.size()) {
                 if (oList.get(i) != Roster.roster.players.get(i).name)
                     changed = true;
+                i++;
             }
             
             if (!changed) {
@@ -149,7 +152,7 @@ public class RosterStage extends Stage {
             }
 
             if(!playerNames.contains(name)) {
-                Player newPlayer = new Player(tempPlayers.size() + 1, name);
+                Player newPlayer = new Player(name);
                 tempPlayers.add(newPlayer);
             } else {
                 playerNames.remove(name);
@@ -158,7 +161,7 @@ public class RosterStage extends Stage {
 
         // Removing players that aren't found in the new list
         if(playerNames.size() != 0) {
-            Alert confirm = new Alert(AlertType.CONFIRMATION, "Some players have been removed from the roster. Are you sure that you'd like to save?\nThis action cannot be undone.", ButtonType.NO, ButtonType.YES);
+            Alert confirm = new Alert(AlertType.CONFIRMATION, "Some players have been removed from the roster. Are you sure that you'd like to save?\nThis action cannot be undone.", ButtonType.YES, ButtonType.NO);
             ButtonType result = confirm.showAndWait().orElse(ButtonType.NO);
 
             if(result == ButtonType.NO) {

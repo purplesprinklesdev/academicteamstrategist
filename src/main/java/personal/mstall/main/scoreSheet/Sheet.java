@@ -16,7 +16,7 @@ public class Sheet {
 
     public String[] getPlayer(String name) {
         for(String[] row : sheet) {
-            if (row[0] == name)
+            if (row[0].equals(name))
                 return row;
         }
         return null;

@@ -229,7 +229,7 @@ public class SheetViewerStage extends Stage {
                         return false;
                     }
                 } else {
-                    if (!row[i].matches("10|[0-9]")) {
+                    if (!row[i].matches("10||[0-9]")) {
                         validityError();
                         return false;
                     }
@@ -248,7 +248,7 @@ public class SheetViewerStage extends Stage {
                 return false;
             }
         } else {
-            if (!value.matches("10|[0-9]")) {
+            if (!value.matches("10||[0-9]")) {
                 validityError(value);
                 return false;
             }
