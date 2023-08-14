@@ -31,7 +31,7 @@ public class Sheet {
         sheet = new ArrayList<>();
     
         for (Player player : Roster.roster.players) {
-            String[] base = { "", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0" };
+            String[] base = { "", "-", "-", "-", "-" };
             base[0] = player.name;
             sheet.add(base);
         }

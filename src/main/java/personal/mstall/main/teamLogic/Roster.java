@@ -1,6 +1,5 @@
 package personal.mstall.main.teamLogic;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlTransient;
@@ -64,53 +63,34 @@ public class Roster {
     }
 
     public static void updatePlayerAverages() {
-        double[] totalQuestions = { 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 10, 10 };
-        
+        final double[] totalQuestions = { 15, 15, 10, 10 };
+
         for (Player player : roster.players) {
-            double[] correctAnswers = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-    
+
+            double[] totalGames = { 0, 0, 0, 0 };
+            double[] correctAnswers = { 0, 0, 0, 0 };
+            double[] averages = { 0, 0, 0, 0 };
+
             for (Sheet sheet : ScoreSheets.scoreSheets.sheets) {
                 String[] row = sheet.getPlayer(player.name);
                 if (row == null) 
                     continue;
                     
                 for (int i = 0; i < correctAnswers.length; i++) {
+                    if (row[i + 1].equals("-"))
+                        continue;
+
+                    totalGames[i]++;
+                    
                     correctAnswers[i] += Double.parseDouble(row[i + 1]);
                 }
             }
-    
-            double[] averages = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+            
             for (int i = 0; i < averages.length; i++) {
-                averages[i] = correctAnswers[i] / totalQuestions[i];
-            }
-
-            double[] sectionAverages = { 0, 0, 0, 0 };
-            for (int section = 0; section < 4; section++) {
-                double[] splitAverage = {};
-                switch (section) {
-                    case 0: 
-                        splitAverage = Arrays.copyOfRange(averages, 0, 5); //   Section 1
-                        break;
-                    case 1:
-                        splitAverage = Arrays.copyOfRange(averages, 5, 10); //  Section 2
-                        break;
-                    case 2:
-                        splitAverage = Arrays.copyOfRange(averages, 10, 11); // Section 3
-                        break;
-                    case 3:
-                        splitAverage = Arrays.copyOfRange(averages, 11, 12); // Section 4
-                        break;
-                }
-    
-                double total = 0;
-                for (double n : splitAverage) {
-                    total += n;
-                }
-
-                sectionAverages[section] = total / splitAverage.length;
+                averages[i] = correctAnswers[i] / (totalQuestions[i] * totalGames[i]);
             }
             
-            player.setSectionAverages(sectionAverages);
+            player.setSectionAverages(averages);
         }
     }
 }

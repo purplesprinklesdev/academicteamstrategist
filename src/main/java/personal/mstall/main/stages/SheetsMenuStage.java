@@ -89,7 +89,7 @@ public class SheetsMenuStage extends Stage {
         });
 
         save.setOnAction(e -> {
-            // Jokes on you! The save button doesn't actually save,
+            // The save button doesn't actually save,
             // because that should have all been done by SheetViewerStage
             close();
         });

@@ -30,16 +30,15 @@ import personal.mstall.main.util.SaveManager;
 
 public class SheetViewerStage extends Stage {
     private static final double SHEETSVIEWER_HEIGHT = 500;
-    private static final double SHEETSVIEWER_WIDTH = 855;
+    private static final double SHEETSVIEWER_WIDTH = 470;
 
     private static final double SHEETSVIEWER_VBOX_GAP = 8;
 
     private static final double SHEETSVIEWER_NAME_CELL_WIDTH = 175;
     private static final double SHEETSVIEWER_CELL_WIDTH = 80;
 
-    private static final String[] SHEET_TITLES = { "Player", "AmLit", "Math", "WHist", "FineArts", "LSci", "WLit",
-            "Gov", "PSci", "Geo", "AmHist", "Alphabet", "Lightning" };
-    private static final int SHEET_COL = 13;
+    private static final String[] SHEET_TITLES = { "Player", "Section 1", "Section 2", "Alphabet", "Lightning" };
+    private static final int SHEET_COL = 5;
 
     private boolean isNew = false;
     private String oldName;
@@ -177,7 +176,8 @@ public class SheetViewerStage extends Stage {
         Sheet sheet = new Sheet(name, data);
 
         boolean overwrite = !unique || !isNew;
-        if (overwrite) { // Remove the sheet to be replaced
+        if (overwrite) { 
+            // Remove the sheet to be replaced
             String replaceName = isNew ? name : oldName;
             int replace = ScoreSheets.scoreSheets.findIndex(replaceName);
 
@@ -223,13 +223,13 @@ public class SheetViewerStage extends Stage {
             for (int i = 0; i < row.length; i++) {
                 if (i == 0)
                     continue;
-                if (i <= 10) {
-                    if (!row[i].matches("[0-3]")) {
+                if (i <= 2) {
+                    if (!row[i].matches("1[0-5]||[0-9]||-")) {
                         validityError();
                         return false;
                     }
                 } else {
-                    if (!row[i].matches("10||[0-9]")) {
+                    if (!row[i].matches("10||[0-9]||-")) {
                         validityError();
                         return false;
                     }
@@ -243,12 +243,12 @@ public class SheetViewerStage extends Stage {
         if (colNo == 0)
             return true;
         if (colNo <= 10) {
-            if (!value.matches("[0-3]")) {
+            if (!value.matches("1[0-5]||[0-9]||-")) {
                 validityError(value);
                 return false;
             }
         } else {
-            if (!value.matches("10||[0-9]")) {
+            if (!value.matches("10||[0-9]||-")) {
                 validityError(value);
                 return false;
             }
@@ -258,14 +258,14 @@ public class SheetViewerStage extends Stage {
 
     private void validityError() {
         Alert error = new Alert(AlertType.ERROR, "There are cells in the scoresheet with invalid values.\n" +
-                "Rows 1-10 can be numbers 0 through 3, while Rows 11 and 12 can have numbers 0 through 10.",
+                "Sections 1 and 2 can be numbers 0 through 15 or \"-\", while Alphabet and Lightning can have numbers 0 through 10 or \"-\".",
                 ButtonType.OK);
         error.showAndWait();
     }
 
     private void validityError(String value) {
         Alert error = new Alert(AlertType.ERROR, "\"" + value + "\" is not a valid value for this cell.\n" +
-                "Rows 1-10 can be numbers 0 through 3, while Rows 11 and 12 can have numbers 0 through 10.",
+                "Sections 1 and 2 can be numbers 0 through 15 or \"-\", while Alphabet and Lightning can have numbers 0 through 10 or \"-\".",
                 ButtonType.OK);
         error.showAndWait();
     }
