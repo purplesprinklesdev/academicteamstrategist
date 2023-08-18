@@ -36,7 +36,7 @@ public class StrategistApp extends Application {
     private static final String FIRSTSCORE_LABEL = "First Half: ";
     private static final String SECONDSCORE_LABEL = "Second Half: ";
 
-    private ArrayList<ChoiceBox<String>> allChoiceBoxes = new ArrayList<>();
+    public static ArrayList<ChoiceBox<String>> allChoiceBoxes = new ArrayList<>();
     public static boolean ignoreChoiceBoxEvents = false;
 
     private Label scoresLabel;
@@ -52,6 +52,7 @@ public class StrategistApp extends Application {
     public void start(Stage primaryStage) throws Exception {
         Roster.loadFromFile();
         ScoreSheets.loadFromFile();
+        TeamCompSaves.loadFromFile();
 
         // -- Create Layouts and Elements -- //
 
@@ -72,9 +73,18 @@ public class StrategistApp extends Application {
         VBox rightPane = new VBox();
         rightPane.setPadding(new Insets(0, THREEPANE_HBOX_GAP, 0, THREEPANE_HBOX_GAP));
 
+        scoresLabel = new Label(SCORES_LABEL);
+        totalScore = new Label(TOTALSCORE_LABEL);
+        firstScore = new Label(FIRSTSCORE_LABEL);
+        secondScore = new Label(SECONDSCORE_LABEL);
+
+        Roster.updatePlayerAverages();  
         setupTeamCompPanes(leftPane, centerPane);
 
         rightPane.setSpacing(RIGHTPANE_VBOX_GAP);
+
+        Button manageTeamSetups = new Button("Manage Team Setups");
+        manageTeamSetups.setMinWidth(BUTTONS_WIDTH);
 
         Button clear = new Button("Clear Team Setup");
         clear.setMinWidth(BUTTONS_WIDTH);
@@ -85,19 +95,9 @@ public class StrategistApp extends Application {
         Button manageRoster = new Button("Manage Roster");
         manageRoster.setMinWidth(BUTTONS_WIDTH);
 
-        scoresLabel = new Label(SCORES_LABEL);
-        totalScore = new Label(TOTALSCORE_LABEL);
-        firstScore = new Label(FIRSTSCORE_LABEL);
-        secondScore = new Label(SECONDSCORE_LABEL);
-
-        Roster.updatePlayerAverages();
-        refreshChoiceBoxItems();
-        //checkChoiceBoxItemValidity();
-        updateTeamCompRating();        
-
         // -- Finalize Scene -- //
 
-        rightPane.getChildren().addAll(clear, manageSheets, manageRoster, scoresLabel, totalScore, firstScore, secondScore);
+        rightPane.getChildren().addAll(manageTeamSetups, clear, manageSheets, manageRoster, scoresLabel, totalScore, firstScore, secondScore);
 
         threePaneMenu.getChildren().addAll(leftPane, centerPane, rightPane);
 
@@ -112,6 +112,12 @@ public class StrategistApp extends Application {
         primaryStage.show();
 
         // -- Action Handlers -- //
+
+        manageTeamSetups.setOnAction(e -> {
+            
+            CompsMenuStage compsMenuStage = new CompsMenuStage();
+            compsMenuStage.showAndWait();
+        });
 
         clear.setOnAction(e -> {
             Alert confirm = new Alert(AlertType.CONFIRMATION, "Are you sure you want to clear all values in the current Team Comp?\nThis action cannot be undone.", ButtonType.YES, ButtonType.NO);
@@ -166,8 +172,7 @@ public class StrategistApp extends Application {
             }
         }
 
-        TeamComp teamComp = TeamComp.loadFromFile();
-        TeamComp.setChoiceBoxesWithTeamComp(allChoiceBoxes, teamComp);
+        clearChoiceBoxes();
     }
 
     private void refreshChoiceBoxItems() {
@@ -256,7 +261,7 @@ public class StrategistApp extends Application {
     }
 
     private void updateTeamCompRating() {
-        TeamComp teamComp = TeamComp.getTeamCompFromChoiceBoxes(allChoiceBoxes);
+        TeamComp teamComp = TeamComp.getTeamCompFromChoiceBoxes();
         
         Rating rating = teamComp.getRating();
 
@@ -278,7 +283,6 @@ public class StrategistApp extends Application {
     private void onChoiceSelected(ChoiceBox<String> choiceBox) {
         if (!ignoreChoiceBoxEvents) {
             refreshChoiceBoxItems();
-            //checkChoiceBoxItemValidity();
             updateTeamCompRating();
         }
     }

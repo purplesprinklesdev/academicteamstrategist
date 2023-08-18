@@ -87,7 +87,10 @@ public class Roster {
             }
             
             for (int i = 0; i < averages.length; i++) {
-                averages[i] = correctAnswers[i] / (totalQuestions[i] * totalGames[i]);
+                if (totalGames[i] == 0)
+                    averages[i] = 0;
+                else
+                    averages[i] = correctAnswers[i] / (totalQuestions[i] * totalGames[i]);
             }
             
             player.setSectionAverages(averages);

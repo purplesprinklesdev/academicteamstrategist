@@ -89,10 +89,18 @@ public class SheetViewerStage extends Stage {
 
             if (result == ButtonType.YES) {
                 int i = ScoreSheets.scoreSheets.findIndex(oldName);
-                ScoreSheets.scoreSheets.sheets.remove(i);
+                Sheet deletedSheet = ScoreSheets.scoreSheets.sheets.remove(i);
 
                 boolean deleteSave = SaveManager.Save(ScoreSheets.scoreSheets, FileType.SCORESHEETS);
-                saveReporter(deleteSave);
+                if (deleteSave)
+                    System.out.println("SAVED SUCCESSFULLY");
+                else {
+                    ScoreSheets.scoreSheets.sheets.add(i, deletedSheet);
+                    System.out.println("SAVING FAILED: FILE ERROR");
+                    Alert error = new Alert(AlertType.ERROR,
+                        "Saving failed because a file error occured. Files were not updated.", ButtonType.OK);
+                    error.showAndWait();
+                }
                 close();
             }
         });
@@ -186,19 +194,18 @@ public class SheetViewerStage extends Stage {
         ScoreSheets.scoreSheets.sheets.add(sheet);
 
         boolean save = SaveManager.Save(ScoreSheets.scoreSheets, FileType.SCORESHEETS);
-        saveReporter(save);
-        return save;
-    }
 
-    private void saveReporter(boolean save) {
         if (save)
             System.out.println("SAVED SUCCESSFULLY");
         else {
+            ScoreSheets.scoreSheets.sheets.remove(sheet);
             System.out.println("SAVING FAILED: FILE ERROR");
             Alert error = new Alert(AlertType.ERROR,
-                    "Saving failed because a file error occured. Files were not updated.", ButtonType.OK);
+                "Saving failed because a file error occured. Files were not updated.", ButtonType.OK);
             error.showAndWait();
         }
+
+        return save;
     }
 
     private boolean isUnique(String name) throws Exception {

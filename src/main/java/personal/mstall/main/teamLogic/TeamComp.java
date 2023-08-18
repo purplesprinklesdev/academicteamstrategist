@@ -4,13 +4,12 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 import jakarta.xml.bind.annotation.*;
-import javafx.scene.control.ChoiceBox;
 import personal.mstall.main.StrategistApp;
-import personal.mstall.main.util.FileType;
-import personal.mstall.main.util.SaveManager;
 
 @XmlRootElement
 public class TeamComp {
+
+    public String name = "";
 
     public ArrayList<Team> teams;
 
@@ -67,7 +66,7 @@ public class TeamComp {
         return new Rating(Math.round((float) firstHalfScore), Math.round((float) secondHalfScore));
     }
 
-    public static TeamComp getTeamCompFromChoiceBoxes(ArrayList<ChoiceBox<String>> allChoiceBoxes) {
+    public static TeamComp getTeamCompFromChoiceBoxes() {
         TeamComp teamComp = new TeamComp();
 
         int i = 0;
@@ -76,7 +75,7 @@ public class TeamComp {
             HashSet<Player> players = new HashSet<>();
 
             for (int playerNo = 0; playerNo < 4; playerNo++) {
-                String name = allChoiceBoxes.get(i).getValue();
+                String name = StrategistApp.allChoiceBoxes.get(i).getValue();
                 Player player = null;
 
                 i++;
@@ -89,36 +88,26 @@ public class TeamComp {
                         continue;
                     }
                 }
-
                 players.add(new Player());
             }
-
             team.setPlayers(players);
         }
 
         return teamComp;
     }
 
-    public static void setChoiceBoxesWithTeamComp(ArrayList<ChoiceBox<String>> allChoiceBoxes, TeamComp teamComp) {
+    public static void setChoiceBoxesWithTeamComp(TeamComp teamComp) {
         StrategistApp.ignoreChoiceBoxEvents = true;
+
         int i = 0;
         for(int teamNo = 0; teamNo < 8; teamNo++) {
             Team team = teamComp.teams.get(teamNo);
 
             for (Player player : team.getPlayers()) {
-                allChoiceBoxes.get(i).setValue(player.name);
+                StrategistApp.allChoiceBoxes.get(i).setValue(player.name);
                 i++;
             }
         }
         StrategistApp.ignoreChoiceBoxEvents = false;
-    }
-
-    public static TeamComp loadFromFile() {
-        Object teamCompObject = SaveManager.Load(FileType.TEAMCOMP);
-
-        if (teamCompObject == null)
-            return new TeamComp();
-        else
-            return new TeamComp((TeamComp) teamCompObject);
     }
 }

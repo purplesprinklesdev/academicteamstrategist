@@ -36,6 +36,7 @@ public class Team {
         this.section = section;
     }
 
+    @XmlTransient
     public HashSet<Player> getPlayers() {
         return players;
     }
@@ -44,7 +45,7 @@ public class Team {
         if (players.size() > 4)
             return false;
 
-        this.players.addAll(players);
+        this.players = players;
         return true;
     }
 
