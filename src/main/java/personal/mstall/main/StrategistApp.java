@@ -31,6 +31,8 @@ public class StrategistApp extends Application {
     private static final double CHOICEBOX_WIDTH = 200;
     private static final double BUTTONS_WIDTH = 250;
 
+    private static final String[] SECTION_LABELS = { "Section 1", "Section 2", "Alphabet", "Lightning" };
+
     private static final String SCORES_LABEL = "Expected Score (# of correct answers)";
     private static final String TOTALSCORE_LABEL = "Total: ";
     private static final String FIRSTSCORE_LABEL = "First Half: ";
@@ -155,7 +157,7 @@ public class StrategistApp extends Application {
             for (int section = 1; section < 5; section++) {
                 VBox sectionVBox = new VBox();
 
-                Label sectionLabel = new Label("Section " + section);
+                Label sectionLabel = new Label(SECTION_LABELS[section - 1]);
                 sectionVBox.getChildren().add(sectionLabel);
 
                 for (int i = 0; i < 4; i++) {

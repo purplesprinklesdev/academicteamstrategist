@@ -48,11 +48,11 @@ public class SheetsMenuStage extends Stage {
         HBox buttonRow = new HBox(10);
         buttonRow.getChildren().addAll(add, edit);
 
-        Button save = new Button();
-        save.setText("Save");
+        Button close = new Button();
+        close.setText("Close");
 
         layout.setAlignment(Pos.TOP_CENTER);
-        layout.getChildren().addAll(label, list, buttonRow, save);
+        layout.getChildren().addAll(label, list, buttonRow, close);
         Scene scene = new Scene(layout, SHEETSMENU_LIST_WIDTH + 40, SHEETSMENU_LIST_HEIGHT + 30);
         setScene(scene);
         setResizable(false);
@@ -88,9 +88,7 @@ public class SheetsMenuStage extends Stage {
             }
         });
 
-        save.setOnAction(e -> {
-            // The save button doesn't actually save,
-            // because that should have all been done by SheetViewerStage
+        close.setOnAction(e -> {
             close();
         });
     }
