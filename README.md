@@ -19,7 +19,7 @@ Created by Matthew Stall for the Williamsburg Academic Team.
     - Other distros:    **UNTESTED**
 
 ## Getting Started
-<p>[Download the latest release](https://github.com/purplesprinklesdev/academicteamstrategist/releases/tag/Release)</p>
+[Download the latest release](https://github.com/purplesprinklesdev/academicteamstrategist/releases/tag/Release)
 
 <p>Start by running the application and clicking on the "Manage Roster" button. Here you should add all of your team's players.</p>
 
