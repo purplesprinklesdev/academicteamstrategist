@@ -19,7 +19,7 @@ Everything *should* still work on platforms that are untested, but don't be surp
     - Other distros:    **UNTESTED**
 
 ## Getting Started
-[Download the latest release](https://github.com/purplesprinklesdev/academicteamstrategist/releases/tag/Release)
+[Download the latest release](https://github.com/purplesprinklesdev/academicteamstrategist/releases/)
 
 <p>Start by running the application and clicking on the "Manage Roster" button. Here you should add all of your team's players.</p>
 
