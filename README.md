@@ -10,12 +10,12 @@ Created by Matthew Stall for the Williamsburg Academic Team.
 <p>Untitled Academic Team Strategist uses JavaFX to render GUI elements. If you encounter visual bugs while using this application, they may be due to compatibility issues between your OS and JavaFX. If possible, try testing the application on a different OS.</p>
 
 #### OS Specific Testing:
+Everything *should* still work on platforms that are untested, but don't be surprised if they do have problems. 
 
-- Windows:  **UNTESTED**
+- Windows:  **WORKING**
 - MacOS:    **UNTESTED**
 - GNU/Linux:
     - pop_OS!:          **WORKING**
-    - ChromeOS (LDE):   **UNTESTED**
     - Other distros:    **UNTESTED**
 
 ## Getting Started

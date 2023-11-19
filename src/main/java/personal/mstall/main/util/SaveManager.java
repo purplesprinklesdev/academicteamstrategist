@@ -41,17 +41,13 @@ public class SaveManager {
     }
 
     private static final String WINDOWS_BASE_DIR = "%APPDATA%/";
-    // TODO: NOT TESTED
+    // WORKING
     private static final String OSX_BASE_DIR = "/Library/ApplicationSupport/";
-    // TODO: NOT TESTED
+    // NOT TESTED
     private static final String LINUX_BASE_DIR = "/.config/";
-    // TODO: TESTED ON:
-    // POP_OS!
+    // TESTED ON:
+    // POP_OS! - WORKING
     private static final String APPNAME = "Strategist/";
-    // TODO: WORKING TITLE
-    // Other ideas:
-    //
-    //
 
     private static final String EXTENSION = ".xml";
 
@@ -63,7 +59,8 @@ public class SaveManager {
         switch (os) {
             case WINDOWS:
                 dirPath = WINDOWS_BASE_DIR + APPNAME;
-                dirPath.replaceAll("/", "\\");
+                // The fucking quadruple backslash makes an appearance here because why not
+                dirPath.replaceAll("/", "\\\\");
                 break;
             case OSX:
                 dirPath = OSUtils.getUserHome() + OSX_BASE_DIR + APPNAME;
