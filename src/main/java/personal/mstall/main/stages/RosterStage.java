@@ -1,8 +1,10 @@
 package personal.mstall.main.stages;
 
+import java.text.Collator;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Locale;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -175,6 +177,36 @@ public class RosterStage extends Stage {
                 Player player = it.next();
                 if (playerNames.contains(player.name))
                     it.remove();
+            }
+        }
+
+        // Alphabetize by last name
+        for (int i = 0; i < tempPlayers.size()-1; i++) {
+            Player p1 = tempPlayers.get(i);
+            Player p2 = tempPlayers.get(i+1);
+
+            String[] p1NameArray = p1.name.split(" ");
+            String p1ReversedName;
+            p1ReversedName = p1NameArray[p1NameArray.length-1];
+            for (int j = 0; j < p1NameArray.length-1; j++) {
+                p1ReversedName += p1NameArray[j];
+            }
+
+            String[] p2NameArray = p2.name.split(" ");
+            String p2ReversedName;
+            p2ReversedName = p2NameArray[p2NameArray.length-1];
+            for (int j = 0; j < p2NameArray.length-1; j++) {
+                p2ReversedName += p2NameArray[j];
+            }
+
+            Collator usCollator = Collator.getInstance(Locale.US);
+            usCollator.setStrength(Collator.PRIMARY);
+            if (usCollator.compare(p1ReversedName, p2ReversedName) > 0) {
+                tempPlayers.set(i, p2);
+                tempPlayers.set(i+1, p1);
+
+                if (i != 0)
+                    i -= 2;
             }
         }
 
