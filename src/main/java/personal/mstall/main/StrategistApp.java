@@ -1,6 +1,10 @@
 package personal.mstall.main;
 
+import java.io.File;
+
 import java.util.ArrayList;
+
+import javax.swing.JFileChooser;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -13,6 +17,8 @@ import javafx.stage.Stage;
 
 import personal.mstall.main.scoreSheet.*;
 import personal.mstall.main.teamLogic.*;
+import personal.mstall.main.util.OSUtils;
+import personal.mstall.main.util.SaveManager;
 import personal.mstall.main.stages.*;
 
 
@@ -97,9 +103,15 @@ public class StrategistApp extends Application {
         Button manageRoster = new Button("Manage Roster");
         manageRoster.setMinWidth(BUTTONS_WIDTH);
 
+        Button importData = new Button("Import Strategist Data");
+        importData.setMinWidth(BUTTONS_WIDTH);
+        
+        Button exportData = new Button("Export Strategist Data");
+        exportData.setMinWidth(BUTTONS_WIDTH);
+
         // -- Finalize Scene -- //
 
-        rightPane.getChildren().addAll(manageTeamSetups, clear, manageSheets, manageRoster, scoresLabel, totalScore, firstScore, secondScore);
+        rightPane.getChildren().addAll(manageTeamSetups, clear, manageSheets, manageRoster, importData, exportData, scoresLabel, totalScore, firstScore, secondScore);
 
         threePaneMenu.getChildren().addAll(leftPane, centerPane, rightPane);
 
@@ -143,6 +155,64 @@ public class StrategistApp extends Application {
 
             refreshChoiceBoxItems();
             Roster.updatePlayerAverages();
+        });
+
+        importData.setOnAction(e -> {
+            Alert confirm = new Alert(AlertType.CONFIRMATION, "Are you sure you would like to import Strategist data? This will erase all existing data on this instance and cannot be undone. It is recommended to make a backup before doing this.", ButtonType.YES, ButtonType.NO);
+            ButtonType result = confirm.showAndWait().orElse(ButtonType.NO);
+
+            if(result == ButtonType.NO) {
+                System.out.println("IMPORT FAILED: ABORTED BY USER");
+                return;
+            }
+
+            JFileChooser fc = new JFileChooser();
+            fc.setCurrentDirectory(new File(OSUtils.documentsDir()));
+            fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+
+            int returnVal = fc.showSaveDialog(null);
+
+            if (returnVal == JFileChooser.APPROVE_OPTION) {
+                File sourceDir = fc.getSelectedFile();
+                if (SaveManager.importDataFrom(sourceDir)) {
+                    Alert error = new Alert(AlertType.INFORMATION, "Import operation completed sucessfully.", ButtonType.OK);
+                    error.showAndWait();
+
+                    clearChoiceBoxes();
+                    refreshChoiceBoxItems();
+                    Roster.updatePlayerAverages();
+                } else {
+                    Alert error = new Alert(AlertType.ERROR, "Import operation encountered an unexpected error. Make sure that the folder you chose is a valid save and the XML file names match.", ButtonType.OK);
+                    error.showAndWait();
+                }
+            }
+            else {
+                Alert abort = new Alert(AlertType.ERROR, "Import operation aborted by user", ButtonType.OK);
+                abort.showAndWait();
+            }
+        });
+
+        exportData.setOnAction(e -> {
+            JFileChooser fc = new JFileChooser();
+            fc.setCurrentDirectory(new File(OSUtils.documentsDir()));
+            fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+
+            int returnVal = fc.showSaveDialog(null);
+
+            if (returnVal == JFileChooser.APPROVE_OPTION) {
+                File destDir = fc.getSelectedFile();
+                if (SaveManager.exportDataTo(destDir)) {
+                    Alert error = new Alert(AlertType.INFORMATION, "Export operation completed sucessfully.", ButtonType.OK);
+                    error.showAndWait();
+                } else {
+                    Alert error = new Alert(AlertType.ERROR, "Export operation encountered an unexpected error. Make sure the source XML files are named appropriately.", ButtonType.OK);
+                    error.showAndWait();
+                }
+            }
+            else {
+                Alert abort = new Alert(AlertType.ERROR, "Export operation aborted by user", ButtonType.OK);
+                abort.showAndWait();
+            }
         });
     }
 

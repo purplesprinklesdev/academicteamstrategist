@@ -1,6 +1,9 @@
 package personal.mstall.main.util;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import static java.nio.file.StandardCopyOption.*;
 
 import jakarta.xml.bind.*;
 
@@ -40,42 +43,65 @@ public class SaveManager {
         }
     }
 
-    private static final String WINDOWS_BASE_DIR = "%APPDATA%/";
-    // WORKING
-    private static final String OSX_BASE_DIR = "/Library/ApplicationSupport/";
-    // NOT TESTED
-    private static final String LINUX_BASE_DIR = "/.config/";
-    // TESTED ON:
-    // POP_OS! - WORKING
+    public static boolean exportDataTo(File destDir) {
+        String destDirPath = destDir.getAbsolutePath() + File.separator;
+        if (OSUtils.getOS() == OSUtils.OS.LINUX)
+            destDirPath += APPNAME.toLowerCase();
+        else
+            destDirPath += APPNAME;
+
+        return copySaveFile(new File(baseDirPath()), new File(destDirPath));
+    }
+    public static boolean importDataFrom(File sourceDir) {
+        return copySaveFile(sourceDir, new File(baseDirPath()));
+    }
+
     private static final String APPNAME = "Strategist/";
 
     private static final String EXTENSION = ".xml";
 
-    private static final File findFile(String filename) {
-        OSUtils.OS os = OSUtils.getOS();
+    private static final boolean copySaveFile(File sourceDir, File targetDir) {
+        File sRoster = new File(sourceDir.getAbsolutePath() + File.separator + "roster.xml");
+        File sScoreSheets = new File(sourceDir.getAbsolutePath() + File.separator + "scoresheets.xml");
 
-        String dirPath = null;
+        File tRoster = new File(targetDir.getAbsolutePath() + File.separator + "roster.xml");
+        File tScoreSheets = new File(targetDir.getAbsolutePath() + File.separator + "scoresheets.xml");
 
-        switch (os) {
-            case WINDOWS:
-                dirPath = WINDOWS_BASE_DIR + APPNAME;
-                // The fucking quadruple backslash makes an appearance here because why not
-                dirPath.replaceAll("/", "\\\\");
-                break;
-            case OSX:
-                dirPath = OSUtils.getUserHome() + OSX_BASE_DIR + APPNAME;
-                break;
-            case LINUX:
-                dirPath = OSUtils.getUserHome() + LINUX_BASE_DIR + APPNAME.toLowerCase();
-                break;
+        try {
+            if (!targetDir.exists())
+                targetDir.mkdirs();
+
+            Files.copy(sRoster.toPath(), tRoster.toPath(), COPY_ATTRIBUTES, REPLACE_EXISTING);
+            Files.copy(sScoreSheets.toPath(), tScoreSheets.toPath(), COPY_ATTRIBUTES, REPLACE_EXISTING);
+            
+            return true;
+        } catch(IOException e) {
+            e.printStackTrace();
+            return false;
         }
+        
+    }
 
-        File dir = new File(dirPath);
+    private static final File findFile(String filename) {
+        File dir = new File(baseDirPath());
         if (!dir.exists())
             dir.mkdirs();
 
-        String path = dirPath + filename + EXTENSION;
+        String path = baseDirPath() + filename + EXTENSION;
 
         return new File(path);
+    }
+
+    private static final String baseDirPath() {
+        OSUtils.OS os = OSUtils.getOS();
+
+        String dirPath = OSUtils.baseDir();
+
+        dirPath += APPNAME;
+
+        if (os == OSUtils.OS.LINUX)
+            dirPath = dirPath.toLowerCase();
+
+        return dirPath;
     }
 }

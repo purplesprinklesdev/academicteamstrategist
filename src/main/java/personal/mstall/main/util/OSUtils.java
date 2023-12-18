@@ -6,6 +6,12 @@ public final class OSUtils {
         OSX,
         LINUX
     }
+    
+    public static final String WINDOWS_BASE_DIR = "%APPDATA%/";
+    public static final String OSX_BASE_DIR = "/Library/ApplicationSupport/";
+    public static final String LINUX_BASE_DIR = "/.config/";
+
+    public static final String DOCUMENTS_DIR = "/Documents/";
 
     private static OS os = null;
     private static String userHome = null;
@@ -16,10 +22,43 @@ public final class OSUtils {
         return os;
     }
 
-    public static String getUserHome() {
+    private static String getUserHome() {
         if (userHome == null)
             userHome = System.getProperty("user.home");
         return userHome;
+    }
+
+    public static String documentsDir() {
+        OSUtils.OS os = OSUtils.getOS();
+
+        String dirPath = DOCUMENTS_DIR;
+
+        if (os == OS.WINDOWS)
+            dirPath.replaceAll("/", "\\\\");
+        
+        return dirPath;
+    }
+
+    public static String baseDir() {
+        OS os = getOS();
+
+        String dirPath = null;
+
+        switch (os) {
+            case WINDOWS:
+                dirPath = WINDOWS_BASE_DIR;
+
+                // The fucking quadruple backslash makes an appearance here because why not
+                dirPath.replaceAll("/", "\\\\");
+                break;
+            case OSX:
+                dirPath = getUserHome() + OSX_BASE_DIR;
+                break;
+            case LINUX:
+                dirPath = getUserHome() + LINUX_BASE_DIR;
+                break;
+        }
+        return dirPath;
     }
 
     private static OS findOS() {
