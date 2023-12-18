@@ -1,5 +1,8 @@
 package personal.mstall.main.scoreSheet;
 import java.util.ArrayList;
+import java.util.Collections;
+
+import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlTransient;
 import personal.mstall.main.util.FileType;
@@ -11,7 +14,16 @@ public class ScoreSheets {
     @XmlTransient
     public static ScoreSheets scoreSheets;
 
-    public ArrayList<Sheet> sheets;
+    @XmlElement
+    private ArrayList<Sheet> sheets;
+
+    public static ArrayList<Sheet> getSheets() {
+        return scoreSheets.sheets;
+    }
+    public static void setSheets(ArrayList<Sheet> newSheets) {
+        Collections.sort(newSheets, new SortSheetByName());
+        scoreSheets.sheets = newSheets;
+    }
 
     public ScoreSheets(ArrayList<Sheet> sheets) {
         if (scoreSheets != null)

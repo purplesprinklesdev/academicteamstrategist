@@ -89,13 +89,18 @@ public class SheetViewerStage extends Stage {
 
             if (result == ButtonType.YES) {
                 int i = ScoreSheets.scoreSheets.findIndex(oldName);
-                Sheet deletedSheet = ScoreSheets.scoreSheets.sheets.remove(i);
+
+                ArrayList<Sheet> scoreSheets = ScoreSheets.getSheets();
+                Sheet deletedSheet = scoreSheets.remove(i);
+                ScoreSheets.setSheets(scoreSheets);
 
                 boolean deleteSave = SaveManager.Save(ScoreSheets.scoreSheets, FileType.SCORESHEETS);
                 if (deleteSave)
                     System.out.println("SAVED SUCCESSFULLY");
                 else {
-                    ScoreSheets.scoreSheets.sheets.add(i, deletedSheet);
+                    scoreSheets.add(i, deletedSheet);
+                    ScoreSheets.setSheets(scoreSheets);
+                    
                     System.out.println("SAVING FAILED: FILE ERROR");
                     Alert error = new Alert(AlertType.ERROR,
                         "Saving failed because a file error occured. Files were not updated.", ButtonType.OK);
@@ -182,6 +187,7 @@ public class SheetViewerStage extends Stage {
         checkValidity(data);
 
         Sheet sheet = new Sheet(name, data);
+        ArrayList<Sheet> scoreSheets = ScoreSheets.getSheets();
 
         boolean overwrite = !unique || !isNew;
         if (overwrite) { 
@@ -189,16 +195,20 @@ public class SheetViewerStage extends Stage {
             String replaceName = isNew ? name : oldName;
             int replace = ScoreSheets.scoreSheets.findIndex(replaceName);
 
-            ScoreSheets.scoreSheets.sheets.remove(replace);
+            scoreSheets.remove(replace);
         }
-        ScoreSheets.scoreSheets.sheets.add(sheet);
+
+        scoreSheets.add(sheet);
+        ScoreSheets.setSheets(scoreSheets);
 
         boolean save = SaveManager.Save(ScoreSheets.scoreSheets, FileType.SCORESHEETS);
 
         if (save)
             System.out.println("SAVED SUCCESSFULLY");
         else {
-            ScoreSheets.scoreSheets.sheets.remove(sheet);
+            scoreSheets.remove(sheet);
+            ScoreSheets.setSheets(scoreSheets);
+
             System.out.println("SAVING FAILED: FILE ERROR");
             Alert error = new Alert(AlertType.ERROR,
                 "Saving failed because a file error occured. Files were not updated.", ButtonType.OK);

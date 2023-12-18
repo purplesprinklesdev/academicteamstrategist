@@ -71,7 +71,7 @@ public class Roster {
             double[] correctAnswers = { 0, 0, 0, 0 };
             double[] averages = { 0, 0, 0, 0 };
 
-            for (Sheet sheet : ScoreSheets.scoreSheets.sheets) {
+            for (Sheet sheet : ScoreSheets.getSheets()) {
                 String[] row = sheet.getPlayer(player.name);
                 if (row == null) 
                     continue;

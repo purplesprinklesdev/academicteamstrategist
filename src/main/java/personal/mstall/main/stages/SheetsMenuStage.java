@@ -72,7 +72,7 @@ public class SheetsMenuStage extends Stage {
                 String targetName = oList.get(i);
 
                 Sheet target = null;
-                for (Sheet sheet : ScoreSheets.scoreSheets.sheets) {
+                for (Sheet sheet : ScoreSheets.getSheets()) {
                     if (sheet.name == targetName) {
                         target = sheet;
                         break;
@@ -95,7 +95,7 @@ public class SheetsMenuStage extends Stage {
 
     private void updateListView(ListView<String> list) {
         ObservableList<String> oList = FXCollections.observableArrayList();
-        for (Sheet sheet : ScoreSheets.scoreSheets.sheets) {
+        for (Sheet sheet : ScoreSheets.getSheets()) {
             oList.add(sheet.name);
         }
         list.setItems(oList);
