@@ -1,6 +1,6 @@
 # Untitled Academic Team Strategist
 
-A Java GUI application which assists in the creation of strategies for Academic Team matches. Based on the scores of past matches, the application predicts how well a team setup will perform. This specifically follows the rules of the [SBAAC Academic Conference](http://sbaac.com/confStandings.aspx?sat=20).
+A Java GUI application which assists in the creation of strategies for Academic Team (Quiz Bowl) matches. Based on the scores of past matches, the application predicts how well a team setup will perform. This specifically follows the rules of the [SBAAC Academic Conference](http://sbaac.com/confStandings.aspx?sat=20).
 Created by Matthew Stall for the Williamsburg Academic Team.
 
 ## Compatibility Information
