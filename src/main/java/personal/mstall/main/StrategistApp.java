@@ -45,6 +45,8 @@ public class StrategistApp extends Application {
     private static final String SECONDSCORE_LABEL = "Second Half: ";
 
     public static ArrayList<ChoiceBox<String>> allChoiceBoxes = new ArrayList<>();
+    private static ArrayList<String> choiceBoxFirstHalfItems = new ArrayList<>();
+    private static ArrayList<String> choiceBoxSecondHalfItems = new ArrayList<>();
     public static boolean ignoreChoiceBoxEvents = false;
 
     private Label scoresLabel;
@@ -250,85 +252,56 @@ public class StrategistApp extends Application {
     private void refreshChoiceBoxItems() {
         ignoreChoiceBoxEvents = true;
         ArrayList<Player> roster = Roster.roster.players;
-        String[] playerNames = new String[roster.size()];
+        ArrayList<String> playerNameList = new ArrayList<>(); 
 
         for (int i = 0; i < roster.size(); i++)
-            playerNames[i] = roster.get(i).name;
+            playerNameList.add(roster.get(i).name);
 
-        for (ChoiceBox<String> choiceBox : allChoiceBoxes) {
-            String prevValue = choiceBox.getValue();
-
-            choiceBox.getItems().clear();
-            choiceBox.getItems().add("Empty Slot");
-            choiceBox.getItems().addAll(playerNames);
-
-            try {
-                choiceBox.setValue(prevValue);
-            } catch(Exception e) {
-                choiceBox.setValue("Empty Slot");
-            }
-        }
-        
         // -- Check Validity For Each Half -- //
         final double lastFirstHalfIndex = 15;
 
-        ArrayList<String> firstHalfItems = new ArrayList<>();
-        ArrayList<String> secondHalfItems = new ArrayList<>();
-
-        for (int i = 0; i < allChoiceBoxes.size(); i++) {
-            ChoiceBox<String> box = allChoiceBoxes.get(i);
-            String value = box.getValue();
-
-            ArrayList<String> targetList = i <= lastFirstHalfIndex ? firstHalfItems : secondHalfItems;
-        
-            if (value == "Empty Slot")
-                continue;
-
-            if (targetList.contains(value))
-                continue;
-
-            targetList.add(box.getValue());
-        }
-
-        for (int i = 0; i < allChoiceBoxes.size(); i++) {
-            ChoiceBox<String> box = allChoiceBoxes.get(i);
-
-            // these are flipped because now we are excluding everything in the opposite half's list
-            ArrayList<String> targetList = i <= lastFirstHalfIndex ? secondHalfItems : firstHalfItems;
-
-            for (String value : targetList)
-                box.getItems().remove(value);
-        }
-
-        // -- Check Validity Within Each Section -- //
-
         // lookup to access other players within each section using relative indexes
-        final int[][] otherPlayersMatrix = {
+        final int[][] shiftMatrix = {
+            { -3, -2, -1 },
             { 1, 2, 3 },
             { -1, 1, 2 },
             { -2, -1, 1 },
-            { -3, -2, -1 }
         };
-        int i = 0;
-        for (int section = 0; section < 8; section++) {
-            for (int player = 0; player < 4; player++) {
-                ChoiceBox<String> box = allChoiceBoxes.get(i);
-                String name = box.getValue();
 
-                if (name == "Empty Slot") {
-                    i++;
-                    continue;
-                }
+        for (int i = 0; i < allChoiceBoxes.size(); i++) {
+            ArrayList<String> thisBoxsItems = new ArrayList<>(playerNameList);
 
-                for (int other = 0; other < 3; other++) {
-                    int shift = otherPlayersMatrix[player][other];
-                    ChoiceBox<String> otherBox = allChoiceBoxes.get(i + shift);
-                    otherBox.getItems().remove(name);
-                }
-                i++;
+            ChoiceBox<String> box = allChoiceBoxes.get(i);
+            String value = box.getValue();
+
+            ArrayList<String> ourList = i <= lastFirstHalfIndex ? choiceBoxFirstHalfItems : choiceBoxSecondHalfItems;
+        
+            if (value != "Empty Slot" && !ourList.contains(value))
+                ourList.add(box.getValue());
+
+            ArrayList<String> otherList = i <= lastFirstHalfIndex ? choiceBoxSecondHalfItems : choiceBoxFirstHalfItems;
+
+            thisBoxsItems.removeAll(otherList);
+
+            int thisBoxsPos = (i+1) % 4;
+            for (int other = 0; other < 3; other++) {
+                int shift = shiftMatrix[thisBoxsPos][other];
+                ChoiceBox<String> otherBox = allChoiceBoxes.get(i + shift);
+
+                thisBoxsItems.remove(otherBox.getValue());
+            }
+            
+            box.getItems().clear();
+            box.getItems().add("Empty Slot");
+            box.getItems().addAll(thisBoxsItems);
+
+            try {
+                box.setValue(value);
+            } catch(Exception e) {
+                box.setValue("Empty Slot");
             }
         }
-
+        
         ignoreChoiceBoxEvents = false;
     }
 
