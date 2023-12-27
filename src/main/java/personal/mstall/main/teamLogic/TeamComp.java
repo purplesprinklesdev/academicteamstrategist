@@ -5,6 +5,7 @@ import java.util.HashSet;
 
 import jakarta.xml.bind.annotation.*;
 import personal.mstall.main.StrategistApp;
+import personal.mstall.main.util.Debug;
 
 @XmlRootElement
 public class TeamComp {
@@ -29,6 +30,7 @@ public class TeamComp {
     }
 
     public Rating getRating() {
+        long startTime = System.currentTimeMillis();
         if (teams.size() == 0)
             return null;
 
@@ -62,11 +64,12 @@ public class TeamComp {
             else
                 secondHalfScore = answersInHalf;
         }
-        
+        Debug.PrintOut("FUNC TIMER: getRating took " + (System.currentTimeMillis() - startTime) + "ms");
         return new Rating(Math.round((float) firstHalfScore), Math.round((float) secondHalfScore));
     }
 
     public static TeamComp getTeamCompFromChoiceBoxes() {
+        long startTime = System.currentTimeMillis();
         TeamComp teamComp = new TeamComp();
 
         int i = 0;
@@ -93,6 +96,7 @@ public class TeamComp {
             team.setPlayers(players);
         }
 
+        Debug.PrintOut("FUNC TIMER: getTeamCompFromChoiceBoxes took " + (System.currentTimeMillis() - startTime) + "ms");
         return teamComp;
     }
 

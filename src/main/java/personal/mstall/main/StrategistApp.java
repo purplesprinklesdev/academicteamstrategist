@@ -19,6 +19,7 @@ import personal.mstall.main.scoreSheet.*;
 import personal.mstall.main.teamLogic.*;
 import personal.mstall.main.util.OSUtils;
 import personal.mstall.main.util.SaveManager;
+import personal.mstall.main.util.Debug;
 import personal.mstall.main.stages.*;
 
 
@@ -108,10 +109,12 @@ public class StrategistApp extends Application {
         
         Button exportData = new Button("Export Strategist Data");
         exportData.setMinWidth(BUTTONS_WIDTH);
-
+        
+        Button debug = new Button("Debug Mode: OFF");
+        exportData.setMinWidth(BUTTONS_WIDTH);
         // -- Finalize Scene -- //
 
-        rightPane.getChildren().addAll(manageTeamSetups, clear, manageSheets, manageRoster, importData, exportData, scoresLabel, totalScore, firstScore, secondScore);
+        rightPane.getChildren().addAll(manageTeamSetups, clear, manageSheets, manageRoster, importData, exportData, debug, scoresLabel, totalScore, firstScore, secondScore);
 
         threePaneMenu.getChildren().addAll(leftPane, centerPane, rightPane);
 
@@ -214,6 +217,15 @@ public class StrategistApp extends Application {
                 abort.showAndWait();
             }
         });
+
+        debug.setOnAction(e -> {
+            if (Debug.debugModeOn)
+                debug.setText("Debug Mode: OFF");
+            else
+                debug.setText("Debug Mode: ON");
+            
+            Debug.debugModeOn = !Debug.debugModeOn;
+        });
     }
 
     private void setupTeamCompPanes(VBox firstHalfVBox, VBox secondHalfVBox) {
@@ -248,6 +260,11 @@ public class StrategistApp extends Application {
     }
 
     private void refreshChoiceBoxItems() {
+        long startTime = System.currentTimeMillis();
+        long segmentedStartTime = startTime;
+
+        ArrayList<String> debugs = new ArrayList<>();
+        
         ignoreChoiceBoxEvents = true;
         ArrayList<Player> roster = Roster.roster.players;
         String[] playerNames = new String[roster.size()];
@@ -269,6 +286,9 @@ public class StrategistApp extends Application {
             }
         }
         
+        debugs.add("FUNC TIMER: FIRST PART took " + (System.currentTimeMillis() - segmentedStartTime) + "ms");
+        segmentedStartTime = System.currentTimeMillis();
+
         // -- Check Validity For Each Half -- //
         final double lastFirstHalfIndex = 15;
 
@@ -300,6 +320,9 @@ public class StrategistApp extends Application {
                 box.getItems().remove(value);
         }
 
+        debugs.add("FUNC TIMER: SECOND PART took " + (System.currentTimeMillis() - segmentedStartTime) + "ms");
+        segmentedStartTime = System.currentTimeMillis();
+
         // -- Check Validity Within Each Section -- //
 
         // lookup to access other players within each section using relative indexes
@@ -330,9 +353,17 @@ public class StrategistApp extends Application {
         }
 
         ignoreChoiceBoxEvents = false;
+
+        debugs.add("FUNC TIMER: THIRD PART took " + (System.currentTimeMillis() - segmentedStartTime) + "ms");
+
+        Debug.PrintOut("FUNC TIMER: refreshChoiceBoxItems took " + (System.currentTimeMillis() - startTime) + "ms");
+        for (String s : debugs) {
+            Debug.PrintOut("|____ " + s);
+        }
     }
 
     private void updateTeamCompRating() {
+        long startTime = System.currentTimeMillis();
         TeamComp teamComp = TeamComp.getTeamCompFromChoiceBoxes();
         
         Rating rating = teamComp.getRating();
@@ -340,6 +371,7 @@ public class StrategistApp extends Application {
         totalScore.setText(TOTALSCORE_LABEL + rating.total);
         firstScore.setText(FIRSTSCORE_LABEL + rating.firstHalf);
         secondScore.setText(SECONDSCORE_LABEL + rating.secondHalf);
+        Debug.PrintOut("FUNC TIMER: updateTeamCompRating took " + (System.currentTimeMillis() - startTime) + "ms");
     }
 
     private void clearChoiceBoxes() {
