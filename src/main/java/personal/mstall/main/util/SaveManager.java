@@ -73,9 +73,12 @@ public class SaveManager {
             if (!targetDir.exists())
                 targetDir.mkdirs();
 
-            Files.copy(sRoster.toPath(), tRoster.toPath(), COPY_ATTRIBUTES, REPLACE_EXISTING);
-            Files.copy(sScoreSheets.toPath(), tScoreSheets.toPath(), COPY_ATTRIBUTES, REPLACE_EXISTING);
-            Files.copy(sTeamComps.toPath(), tTeamComps.toPath(), COPY_ATTRIBUTES, REPLACE_EXISTING);
+            if (sRoster.exists())
+                Files.copy(sRoster.toPath(), tRoster.toPath(), COPY_ATTRIBUTES, REPLACE_EXISTING);
+            if (sScoreSheets.exists())
+                Files.copy(sScoreSheets.toPath(), tScoreSheets.toPath(), COPY_ATTRIBUTES, REPLACE_EXISTING);
+            if (sTeamComps.exists())
+                Files.copy(sTeamComps.toPath(), tTeamComps.toPath(), COPY_ATTRIBUTES, REPLACE_EXISTING);
             
             return true;
         } catch(IOException e) {
