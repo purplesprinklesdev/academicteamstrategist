@@ -63,16 +63,19 @@ public class SaveManager {
     private static final boolean copySaveFile(File sourceDir, File targetDir) {
         File sRoster = new File(sourceDir.getAbsolutePath() + File.separator + "roster.xml");
         File sScoreSheets = new File(sourceDir.getAbsolutePath() + File.separator + "scoresheets.xml");
+        File sTeamComps = new File(sourceDir.getAbsolutePath() + File.separator + "teamcomp.xml");
 
         File tRoster = new File(targetDir.getAbsolutePath() + File.separator + "roster.xml");
         File tScoreSheets = new File(targetDir.getAbsolutePath() + File.separator + "scoresheets.xml");
-
+        File tTeamComps = new File(targetDir.getAbsolutePath() + File.separator + "teamcomp.xml");
+        
         try {
             if (!targetDir.exists())
                 targetDir.mkdirs();
 
             Files.copy(sRoster.toPath(), tRoster.toPath(), COPY_ATTRIBUTES, REPLACE_EXISTING);
             Files.copy(sScoreSheets.toPath(), tScoreSheets.toPath(), COPY_ATTRIBUTES, REPLACE_EXISTING);
+            Files.copy(sTeamComps.toPath(), tTeamComps.toPath(), COPY_ATTRIBUTES, REPLACE_EXISTING);
             
             return true;
         } catch(IOException e) {
