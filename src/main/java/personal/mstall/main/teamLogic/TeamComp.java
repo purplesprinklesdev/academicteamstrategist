@@ -13,6 +13,8 @@ public class TeamComp {
 
     public ArrayList<Team> teams;
 
+    private static final double[] questionsPerSection = { 15, 15, 10, 10 };
+
     public TeamComp() {
         this.teams = new ArrayList<>();
         for (int half = 0; half < 2; half++) {
@@ -32,7 +34,7 @@ public class TeamComp {
         if (teams.size() == 0)
             return null;
 
-        double[] questionsPerSection = { 15, 15, 10, 10 };
+        
 
         double firstHalfScore = 0;
         double secondHalfScore = 0;
@@ -78,17 +80,22 @@ public class TeamComp {
                 String name = StrategistApp.allChoiceBoxes.get(i).getValue();
                 Player player = null;
 
-                i++;
-
                 if (name != "Empty Slot") {
                     player = Roster.roster.findPlayerWithName(name);
 
                     if (player != null) {
+                        int sectionIndex = teamNo < 4 ? teamNo : teamNo - 4;
+                        double labelValue = questionsPerSection[sectionIndex] * player.getSectionAverages()[sectionIndex];
+                        StrategistApp.allChoiceBoxLabels.get(i).setText(String.valueOf(Math.round(labelValue)));
                         players.add(player);
+                        i++;
                         continue;
                     }
+                } else {
+                    StrategistApp.allChoiceBoxLabels.get(i).setText("0");
                 }
                 players.add(new Player());
+                i++;
             }
             team.setPlayers(players);
         }

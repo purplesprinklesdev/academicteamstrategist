@@ -24,7 +24,7 @@ import personal.mstall.main.stages.*;
 
 public class StrategistApp extends Application {
     private static final String WINDOW_TITLE = "Strategist";
-    private static final double WINDOW_SIZE_X = 765;
+    private static final double WINDOW_SIZE_X = 880;
     private static final double WINDOW_SIZE_Y = 650;
 
     private static final String MAINMENU_LABEL = "Academic Team Strategist";
@@ -45,8 +45,7 @@ public class StrategistApp extends Application {
     private static final String SECONDSCORE_LABEL = "Second Half: ";
 
     public static ArrayList<ChoiceBox<String>> allChoiceBoxes = new ArrayList<>();
-    private static ArrayList<String> choiceBoxFirstHalfItems = new ArrayList<>();
-    private static ArrayList<String> choiceBoxSecondHalfItems = new ArrayList<>();
+    public static ArrayList<Label> allChoiceBoxLabels = new ArrayList<>();
     public static boolean ignoreChoiceBoxEvents = false;
 
     private Label scoresLabel;
@@ -133,6 +132,8 @@ public class StrategistApp extends Application {
             
             CompsMenuStage compsMenuStage = new CompsMenuStage();
             compsMenuStage.showAndWait();
+            refreshChoiceBoxItems();
+            updateTeamCompRating();
         });
 
         clear.setOnAction(e -> {
@@ -233,13 +234,20 @@ public class StrategistApp extends Application {
                 sectionVBox.getChildren().add(sectionLabel);
 
                 for (int i = 0; i < 4; i++) {
+                    HBox choiceHBox = new HBox();
+                    choiceHBox.setSpacing(8);
+
                     ChoiceBox<String> choiceBox = new ChoiceBox<>();
                     choiceBox.setMinWidth(CHOICEBOX_WIDTH);
-
                     choiceBox.setOnAction(e -> onChoiceSelected(choiceBox));
 
+                    Label choiceBoxLabel = new Label("0");
+                    choiceBoxLabel.setMinWidth(40);
+
                     allChoiceBoxes.add(choiceBox);
-                    sectionVBox.getChildren().add(choiceBox);
+                    allChoiceBoxLabels.add(choiceBoxLabel);
+                    choiceHBox.getChildren().addAll(choiceBox, choiceBoxLabel);
+                    sectionVBox.getChildren().add(choiceHBox);
                 }
 
                 targetVBox.getChildren().add(sectionVBox);
@@ -268,20 +276,32 @@ public class StrategistApp extends Application {
             { -2, -1, 1 },
         };
 
+        ArrayList<String> firstHalfList = new ArrayList<>(playerNameList);
+        ArrayList<String> secondHalfList = new ArrayList<>(playerNameList);
+
+        ArrayList<String> namesCovered = new ArrayList<>();
+
         for (int i = 0; i < allChoiceBoxes.size(); i++) {
-            ArrayList<String> thisBoxsItems = new ArrayList<>(playerNameList);
+            ChoiceBox<String> box = allChoiceBoxes.get(i);
+            String name = box.getValue();
+
+            if (name == "Empty Slot" || namesCovered.contains(name))
+                continue;
+            
+            namesCovered.add(name);
+
+            Boolean isFirstHalf = i < 16;
+            if (isFirstHalf)
+                secondHalfList.remove(name);
+            else 
+                firstHalfList.remove(name);
+        }
+
+        for (int i = 0; i < allChoiceBoxes.size(); i++) {
+            ArrayList<String> thisBoxsItems = new ArrayList<>(i <= lastFirstHalfIndex ? firstHalfList : secondHalfList);
 
             ChoiceBox<String> box = allChoiceBoxes.get(i);
             String value = box.getValue();
-
-            ArrayList<String> ourList = i <= lastFirstHalfIndex ? choiceBoxFirstHalfItems : choiceBoxSecondHalfItems;
-        
-            if (value != "Empty Slot" && !ourList.contains(value))
-                ourList.add(box.getValue());
-
-            ArrayList<String> otherList = i <= lastFirstHalfIndex ? choiceBoxSecondHalfItems : choiceBoxFirstHalfItems;
-
-            thisBoxsItems.removeAll(otherList);
 
             int thisBoxsPos = (i+1) % 4;
             for (int other = 0; other < 3; other++) {

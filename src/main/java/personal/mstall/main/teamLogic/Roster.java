@@ -58,7 +58,7 @@ public class Roster {
                 return player;
         }
         
-        System.out.println("Player with name \"" + name + "\" not found!");
+        System.out.println("Player with name \"" + name + "\" not found. This shouldn't happen!");
         return null;
     }
 
