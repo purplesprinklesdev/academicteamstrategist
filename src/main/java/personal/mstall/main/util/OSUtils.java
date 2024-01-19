@@ -7,7 +7,7 @@ public final class OSUtils {
         LINUX
     }
     
-    public static final String WINDOWS_BASE_DIR = "%APPDATA%/";
+    public static final String WINDOWS_BASE_DIR = "/AppData/Local/";
     public static final String OSX_BASE_DIR = "/Library/ApplicationSupport/";
     public static final String LINUX_BASE_DIR = "/.config/";
 
@@ -46,7 +46,7 @@ public final class OSUtils {
 
         switch (os) {
             case WINDOWS:
-                dirPath = WINDOWS_BASE_DIR;
+                dirPath = getUserHome() + WINDOWS_BASE_DIR;
 
                 // The fucking quadruple backslash makes an appearance here because why not
                 dirPath.replaceAll("/", "\\\\");
