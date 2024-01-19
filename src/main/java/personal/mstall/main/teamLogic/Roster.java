@@ -53,6 +53,9 @@ public class Roster {
     }
 
     public Player findPlayerWithName(String name) {
+        if (name == "Empty Slot")
+            return null;
+        
         for (Player player : players) {
             if (player.name == name)
                 return player;
@@ -91,6 +94,9 @@ public class Roster {
                     averages[i] = 0;
                 else
                     averages[i] = correctAnswers[i] / (totalQuestions[i] * totalGames[i]);
+                
+                if (i == 2) // Alphabet round - new calculation method
+                    averages[i] /= 4;
             }
             
             player.setSectionAverages(averages);

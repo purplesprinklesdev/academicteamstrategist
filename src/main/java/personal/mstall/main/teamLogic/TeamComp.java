@@ -34,8 +34,6 @@ public class TeamComp {
         if (teams.size() == 0)
             return null;
 
-        
-
         double firstHalfScore = 0;
         double secondHalfScore = 0;
 
@@ -78,23 +76,19 @@ public class TeamComp {
 
             for (int playerNo = 0; playerNo < 4; playerNo++) {
                 String name = StrategistApp.allChoiceBoxes.get(i).getValue();
-                Player player = null;
+                Player player = Roster.roster.findPlayerWithName(name);
 
-                if (name != "Empty Slot") {
-                    player = Roster.roster.findPlayerWithName(name);
-
-                    if (player != null) {
-                        int sectionIndex = teamNo < 4 ? teamNo : teamNo - 4;
-                        double labelValue = questionsPerSection[sectionIndex] * player.getSectionAverages()[sectionIndex];
-                        StrategistApp.allChoiceBoxLabels.get(i).setText(String.valueOf(Math.round(labelValue)));
-                        players.add(player);
-                        i++;
-                        continue;
-                    }
-                } else {
+                if (player == null) {
                     StrategistApp.allChoiceBoxLabels.get(i).setText("0");
+                    players.add(new Player());
+                } else {
+                    int sectionIndex = teamNo < 4 ? teamNo : teamNo - 4;
+
+                    double labelValue = questionsPerSection[sectionIndex] * player.getSectionAverages()[sectionIndex];
+                    StrategistApp.allChoiceBoxLabels.get(i).setText(String.valueOf(Math.round(labelValue)));
+
+                    players.add(player);
                 }
-                players.add(new Player());
                 i++;
             }
             team.setPlayers(players);
