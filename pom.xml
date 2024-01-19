@@ -11,8 +11,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.target>8</maven.compiler.target>
-        <maven.compiler.source>19</maven.compiler.source>
+        <maven.compiler.release>19</maven.compiler.release>
         <junit.version>5.8.2</junit.version>
         <jakarta.jakartaee-api.version>9.1.0</jakarta.jakartaee-api.version>
         <failOnMissingWebXml>false</failOnMissingWebXml>
