@@ -14,6 +14,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import javafx.scene.image.Image;
 
 import personal.mstall.main.scoreSheet.*;
 import personal.mstall.main.teamLogic.*;
@@ -23,9 +24,13 @@ import personal.mstall.main.stages.*;
 
 
 public class StrategistApp extends Application {
-    private static final String WINDOW_TITLE = "Strategist";
+    private static final String WINDOW_TITLE = "Academic Team Strategist";
     private static final double WINDOW_SIZE_X = 880;
     private static final double WINDOW_SIZE_Y = 650;
+
+    private static final String ICON_PATH_512 = "/icon/icon512.gif";
+    private static final String ICON_PATH_256 = "/icon/icon256.gif";
+    private static final String ICON_PATH_64 = "/icon/icon64.gif";
 
     private static final String MAINMENU_LABEL = "Academic Team Strategist";
     private static final double MAINMENU_VBOX_GAP = 8;
@@ -43,6 +48,8 @@ public class StrategistApp extends Application {
     private static final String TOTALSCORE_LABEL = "Total: ";
     private static final String FIRSTSCORE_LABEL = "First Half: ";
     private static final String SECONDSCORE_LABEL = "Second Half: ";
+    private static final String CREDIT_LABEL = "Created by Matthew Stall for the Williamsburg Academic Team";
+    private static final String VERSION_LABEL = "v1.3.0";
 
     public static ArrayList<ChoiceBox<String>> allChoiceBoxes = new ArrayList<>();
     public static ArrayList<Label> allChoiceBoxLabels = new ArrayList<>();
@@ -70,6 +77,8 @@ public class StrategistApp extends Application {
         mainMenu.setSpacing(MAINMENU_VBOX_GAP);
 
         Label topLabel = new Label(MAINMENU_LABEL);
+        Label creditLabel = new Label(CREDIT_LABEL);
+        Label versionLabel = new Label(VERSION_LABEL);
 
         HBox threePaneMenu = new HBox();
         mainMenu.setPadding(new Insets(20, 20, 20, 20));
@@ -117,13 +126,19 @@ public class StrategistApp extends Application {
         threePaneMenu.getChildren().addAll(leftPane, centerPane, rightPane);
 
         mainMenu.setAlignment(Pos.TOP_CENTER);
-        mainMenu.getChildren().addAll(topLabel, threePaneMenu);
+        mainMenu.getChildren().addAll(topLabel, creditLabel, threePaneMenu, versionLabel);
 
         Scene scene = new Scene(mainMenu, WINDOW_SIZE_X, WINDOW_SIZE_Y);
 
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
         primaryStage.setTitle(WINDOW_TITLE);
+
+        Image icon512 = new Image(ICON_PATH_512);
+        Image icon256 = new Image(ICON_PATH_256);
+        Image icon64 = new Image(ICON_PATH_64);
+        primaryStage.getIcons().addAll(icon512, icon256, icon64);
+
         primaryStage.show();
 
         // -- Action Handlers -- //
