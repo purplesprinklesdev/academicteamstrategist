@@ -5,6 +5,7 @@ import java.util.HashSet;
 
 import jakarta.xml.bind.annotation.*;
 import personal.mstall.main.StrategistApp;
+import personal.mstall.main.util.Round;
 
 @XmlRootElement
 public class TeamComp {
@@ -62,8 +63,11 @@ public class TeamComp {
             else
                 secondHalfScore = answersInHalf;
         }
+
+        firstHalfScore = Round.ToDecimalPlace(firstHalfScore, 100);
+        secondHalfScore = Round.ToDecimalPlace(secondHalfScore, 100);
         
-        return new Rating(Math.round((float) firstHalfScore), Math.round((float) secondHalfScore));
+        return new Rating(firstHalfScore, secondHalfScore);
     }
 
     public static TeamComp getTeamCompFromChoiceBoxes() {
@@ -85,8 +89,10 @@ public class TeamComp {
                     int sectionIndex = teamNo < 4 ? teamNo : teamNo - 4;
 
                     double labelValue = questionsPerSection[sectionIndex] * player.getSectionAverages()[sectionIndex];
-                    StrategistApp.allChoiceBoxLabels.get(i).setText(String.valueOf(Math.round(labelValue)));
 
+                    labelValue = Round.ToDecimalPlace(labelValue, 100);
+
+                    StrategistApp.allChoiceBoxLabels.get(i).setText(String.valueOf(labelValue));
                     players.add(player);
                 }
                 i++;
